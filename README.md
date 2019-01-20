@@ -16,9 +16,9 @@ Review the [Optional configuration](#opt_config) section to determine which appl
 
 A [Renew certificate](#renew) section has also been created as a guide of what to expect for post deployment certificate renewal if using Let's Encrypt.
 
-### Create directories on host
+### Directories
 
-Directories are created on the host to persist data for the containers to volume mount from the host.
+Directories to persist data for the containers to volume mount from the host.
 
 - **mysql**: The database files for MariaDB
 - **wordpress**: The WordPress media files
@@ -26,12 +26,13 @@ Directories are created on the host to persist data for the containers to volume
 - **certs**: SSL certificate files (LetsEncrypt)
 - **certs-data**: SSL challenge/response area (LetsEncrypt)
 
-From the top level of the cloned repository, create the directories that will be used for managing the data on the host.
+### Configure
 
-```
-$ cd wordpress-nginx-docker/
-# mkdir -p certs/ certs-data/ logs/nginx/ mysql/ wordpress/
-```
+Copy .env.example file to .env and edit
+
+`cp .env.example .env`
+
+
 
 ### HTTP
 

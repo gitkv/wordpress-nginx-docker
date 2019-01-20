@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
     container_name: nginx
     ports:
       - '80:80'
@@ -9,7 +9,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
-      - ./wordpress:/var/www/html
+      - ${WORDPRESS_DIR}:/var/www/html
       - ./certs:/etc/letsencrypt
       - ./certs-data:/data/letsencrypt
     links:
@@ -22,19 +22,23 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
 
   wordpress:
-    image: wordpress:php7.2-fpm
+    image: wordpress:php7.2-fpm-alpine
     container_name: wordpress
     volumes:
-      - ./wordpress:/var/www/html
+      - ${WORDPRESS_DIR}:/var/www/html
     environment:
-      - WORDPRESS_DB_NAME=wordpress
-      - WORDPRESS_TABLE_PREFIX=wp_
-      - WORDPRESS_DB_HOST=mysql
-      - WORDPRESS_DB_PASSWORD=password
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE_NAME}
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
     links:
       - mysql
     restart: always
